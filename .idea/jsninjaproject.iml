@@ -4,5 +4,13 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="gulp-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="gulp-ruby-sass-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="jquery-2.1.4" level="application" />
+    <orderEntry type="library" name="jquery-3.1.0" level="application" />
+    <orderEntry type="library" name="node-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="npm-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="tether" level="application" />
+    <orderEntry type="library" name="480b5b67e9" level="application" />
   </component>
 </module>

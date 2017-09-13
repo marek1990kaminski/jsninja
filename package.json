@@ -4,7 +4,8 @@
   "description": "I am just making this tut in jsninja book",
   "main": "gulpfile.js",
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^3.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

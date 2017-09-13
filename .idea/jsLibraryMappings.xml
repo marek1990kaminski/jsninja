@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{480b5b67e9, gulp-DefinitelyTyped, gulp-ruby-sass-DefinitelyTyped, jquery-2.1.4, jquery-3.1.0, node-DefinitelyTyped, npm-DefinitelyTyped, tether}" />
+  </component>
+</project>
