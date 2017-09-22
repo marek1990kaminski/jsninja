@@ -28,7 +28,7 @@ gulp.task('styles', function () {
 //HTML Task
 gulp.task('html', function () {
     gulp.src('app/*.htm')
-    .pipe(reload({stream: true}));
+        .pipe(reload({stream: true}));
 });
 
 //Browser-Sync Task
