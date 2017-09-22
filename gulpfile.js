@@ -9,31 +9,33 @@ var gulp = require('gulp'),
 //Scripts Task
 //Uglifies
 gulp.task('scripts', function () {
-    gulp.src('js/src/*.js')
+    gulp.src('app/js/src/*.js')
         .pipe(plumber())
         .pipe(uglify())
-        .pipe(gulp.dest('js/dst'))
+        .pipe(gulp.dest('app/js/dst'))
+        .pipe(reload({stream: true}));
 });
 
 //styles task
 gulp.task('styles', function () {
-    return sass('css/src/*.scss', {style: 'compressed'})
+    return sass('app/css/src/*.scss', {style: 'compressed'})
         .pipe(plumber())
         .on('error', sass.logError)
-        .pipe(gulp.dest('css/dst'))
+        .pipe(gulp.dest('app/css/dst'))
         .pipe(reload({stream: true}));
 });
 
 //HTML Task
 gulp.task('html', function () {
-    gulp.src('*.htm');
+    gulp.src('app/*.htm')
+    .pipe(reload({stream: true}));
 });
 
 //Browser-Sync Task
 gulp.task('browser-sync', function () {
     browserSync({
         server: {
-            baseDir: "jsninjaproject",
+            baseDir: "./app/",
             index: "index.htm"
         }
     });
@@ -41,9 +43,9 @@ gulp.task('browser-sync', function () {
 
 //watch task
 gulp.task('watch', function () {
-    gulp.watch('js/src/*.js', ['scripts']);
-    gulp.watch('css/src/*.scss', ['styles']);
-    gulp.watch('*.htm', ['html']);
+    gulp.watch('app/js/src/*.js', ['scripts']);
+    gulp.watch('app/css/src/*.scss', ['styles']);
+    gulp.watch('app/**/*.htm', ['html']);
 });
 
 gulp.task('default', ['scripts', 'styles', 'html', 'browser-sync', 'watch']);
