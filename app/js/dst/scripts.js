@@ -1,1 +1,1 @@
-alert("Welcome to Quiz Ninja!");var question="What is Superman's real name?",answer=prompt(question);alert("You answered "+answer);
+alert("Welcome to Quiz Ninja!");for(var quiz=[["What is Superman's real name?","Clarke Kent"],["What is Wonderwoman's real name?","Dianna Prince"],["What is Batman's real name?","Bruce Wayne"]],score=0,i=0,max=quiz.length;i<max;i++){var question=quiz[i][0],answer=prompt(question);answer===quiz[i][1]?(alert("good answer"),score++):alert("wronk!")}
