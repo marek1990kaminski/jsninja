@@ -1,26 +1,70 @@
-// welcome the user
-alert("Welcome to Quiz Ninja!");
+//// dom references ////
+var $question = document.getElementById("question");
+var $score = document.getElementById("score");
+var $feedback = document.getElementById("feedback");
 
-/*var question = "What is Superman's real name?";
-var answer = prompt(question);
-alert("You answered " + answer);*/
+/// view functions ///
+function update(element, content, klass) {
+    var p = element.firstChild || document.createElement("p");
+    p.textContent = content;
+    element.appendChild(p);
+    if (klass) {
+        p.className = klass;
+    }
+}
 
-var quiz = [
-    ["What is Superman's real name?", "Clarke Kent"],
-    ["What is Wonderwoman's real name?", "Dianna Prince"],
-    ["What is Batman's real name?", "Bruce Wayne"]
-];
+var quiz = {
+    "name": "Super Hero Name Quiz",
+    "description": "How many super heroes can you name?",
+    "question": "What is the real name of ",
+    "questions": [
+        {"question": "Superman", "answer": "Clarke Kent"},
+        {"question": "Batman", "answer": "Bruce Wayne"},
+        {"question": "Wonder Woman", "answer": "Dianna Prince"}
+    ]
+};
 
 
 var score = 0; // initialize score
 
-for (var i = 0, max = quiz.length; i < max; i++) {
-    var question = quiz[i][0];
-    var answer = prompt(question);
-    if (answer === quiz[i][1]) {
-        alert("good answer");
-        score++;
-    } else {
-        alert("wronk!");
+update($score, score);
+
+function play(quiz) {
+
+    //functions declarations
+    function ask(question) {
+        update($question, quiz.question + question);
+        return prompt(quiz.question + question);
     }
+
+    function check(answer) {
+        if (answer === quiz.questions[i].answer) { // quiz[i][1] is the ith answer
+            update($feedback, "Correct!", "right");
+            // increase score by 1
+            score++;
+            update($score, score)
+        } else {
+            update($feedback, "Wrong!", "wrong");
+        }
+    }
+
+    function gameOver() {
+        // inform the player that the game has finished and tell them how many points they have scored
+        update($question, "Game Over, you scored " + score + " points");
+    }
+
+    // main game loop
+    for (var i = 0, question, answer, max = quiz.questions.length; i < max; i++) {
+        question = quiz.questions[i].question;
+        answer = ask(question);
+        check(answer);
+    }
+    // end of main game loop
+
+    gameOver();
+
 }
+
+
+//finally use this glamorous function
+play(quiz);
