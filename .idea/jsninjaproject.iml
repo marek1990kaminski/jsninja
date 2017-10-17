@@ -12,5 +12,8 @@
     <orderEntry type="library" name="tether" level="application" />
     <orderEntry type="library" name="fontawesome" level="application" />
     <orderEntry type="library" name="gulp-nunit-runner-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="jQuery-2.0.0" level="application" />
+    <orderEntry type="library" name="jquery-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="tether-DefinitelyTyped" level="application" />
   </component>
 </module>

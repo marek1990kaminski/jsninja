@@ -4,6 +4,7 @@ var $score = document.getElementById("score");
 var $feedback = document.getElementById("feedback");
 var $start = document.getElementById("start");
 var $form = document.getElementById("answer");
+var $timer = document.getElementById("timer");
 
 var quiz = {
     "name": "Super Hero Name Quiz",
@@ -20,7 +21,7 @@ var score = 0; // initialize score
 
 /// view functions ///
 function update(element, content, klass) {
-    var p = element.firstChild || document.createElement("p");
+    var p = element.firstChild || document.createElement("p"); //firstChild works, because every element in HTM file has been created without any whitespaces inside
     p.textContent = content;
     element.appendChild(p);
     if (klass) {
@@ -48,12 +49,30 @@ function play(quiz) {
     hide($start);
     show($form);
 
+    // initialize timer and set up an interval that counts down
+    var time = 20;
+    update($timer, time);
+    var interval = window.setInterval(countDown, 1000);
+
     $form.addEventListener('submit', function (event) {
         event.preventDefault();
         check($form[0].value);
     }, false);
 
     //functions declarations
+
+    // this is called every second and decreases the time
+    function countDown() {
+        // decrease time by 1
+        time--;
+        // update the time displayed
+        update($timer, time);
+        // the game is over if the timer has reached 0
+        if (time <= 0) {
+            gameOver();
+        }
+    }
+
     function ask(question) {
         update($question, quiz.question + question);
         $form[0].value = "";
@@ -89,6 +108,9 @@ function play(quiz) {
 
         hide($form);
         show($start);
+
+        // stop the countdown interval
+        window.clearInterval(interval);
     }
 
     var i = 0;

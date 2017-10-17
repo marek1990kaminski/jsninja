@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{jsninjaproject/node_modules}" />
-    <file url="PROJECT" libraries="{fontawesome, gulp-DefinitelyTyped, gulp-nunit-runner-DefinitelyTyped, gulp-ruby-sass-DefinitelyTyped, jquery-3.1.0, jsninjaproject/node_modules, node-DefinitelyTyped, npm-DefinitelyTyped, tether}" />
+    <file url="PROJECT" libraries="{gulp-DefinitelyTyped, jQuery-2.0.0, jquery-DefinitelyTyped, node-DefinitelyTyped, npm-DefinitelyTyped, tether-DefinitelyTyped}" />
     <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>

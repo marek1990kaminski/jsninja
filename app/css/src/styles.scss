@@ -5,7 +5,7 @@ section p {
     color      : #666;
     text-align : center;
     padding    : 10px;
-    margin     : 10px;
+    margin     : 10px auto;
     width      : 300px;
 }
 
@@ -31,12 +31,9 @@ header {
     background     : #aaa;
     color          : #b11;
     text-transform : uppercase;
-    height         : 6.5em;
     font-weight    : 400;
     line-height    : 2em;
-    box-sizing     : border-box;
     padding        : .2em;
-    display        : block;
 }
 
 input, button {
@@ -56,4 +53,8 @@ body {
 
 html {
     background : #444;
+}
+
+#timer {
+    text-align : center;
 }
