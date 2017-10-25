@@ -1,6 +1,7 @@
 (function () {
     "use strict";
 //// dom references ////
+
     var $question = document.getElementById("question");
     var $score = document.getElementById("score");
     var $feedback = document.getElementById("feedback");
@@ -8,19 +9,28 @@
     var $form = document.getElementById("answer");
     var $timer = document.getElementById("timer");
 
+
+    $form.addEventListener("submit", function (e) {
+        e.preventDefault();
+    })
+
     var quiz = {
         "name": "Super Hero Name Quiz",
         "description": "How many super heroes can you name?",
         "question": "What is the real name of ",
         "questions": [
-            {"question": "Superman", "answer": "Clarke Kent"},
-            {"question": "Batman", "answer": "Bruce Wayne"},
-            {"question": "Wonder Woman", "answer": "Dianna Prince"}
+            {"question": "Superman", "answer": "Clarke Kent", "asked": false},
+            {"question": "Batman", "answer": "Bruce Wayne", "asked": false},
+            {"question": "Wonder Woman", "answer": "Dianna Prince", "asked": false},
+            {"question": "Spider Man", "answer": "Peter Parker", "asked": false},
+            {"question": "Iron Man", "answer": "Tony Stark", "asked": false},
         ]
     };
 
+    var question; // current question
     var score = 0; // initialize score
 
+    var i = 0; //initialize counter
 /// view functions ///
     function update(element, content, klass) {
         console.trace();
@@ -45,27 +55,47 @@
 // hide the form at the start of the game
     hide($form);
 
+//hide the timer
+    hide($timer);
+
+
+//random function
+
+    function random(a, b, callback) {
+        if (b === undefined) {
+            // if only one argument is supplied, assume the lower limit is 1
+            b = a, a = 1;
+        }
+        var result = Math.floor((b - a + 1) * Math.random()) + a;
+        if (typeof callback === "function") {
+            result = callback(result);
+        }
+        return result;
+    }
+
 //play function
     function play(quiz) {
 
-        // hide button, and show form and feedback, besides, feedback needs to be cleared.
+        // hide button, and show form and feedback and timer, besides, feedback needs to be cleared.
         hide($start);
         $feedback.innerHTML = "";
-        show($feedback);
         show($form);
+        show($feedback);
+        show($timer);
+
 
         //reset score
-        score = 0;
-        update($score, score);
+        /*score = 0;
+        update($score, score);*/
 
         // initialize timer and set up an interval that counts down
         var time = 20;
         update($timer, time);
         var interval = window.setInterval(countDown, 1000);
 
-        $form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            check($form[0].value);
+        // add event listener to form for when it's submitted
+        $form.addEventListener('click', function(event) {
+            check(event.target.value);
         }, false);
 
         //functions declarations
@@ -84,15 +114,41 @@
 
         function ask(question) {
             console.log("ask() invoked");
-            update($question, quiz.question + question);
-            $form[0].value = "";
-            $form[0].focus();
+            // set the question.asked property to true so it's not asked again
+            question.asked = true;
+            update($question, quiz.question + question.question + '?');
+            // create an array to put the different options in and a button variable
+            var options = [], button;
+            var option1 = chooseOption();
+            options.push(option1.answer);
+            var option2 = chooseOption();
+            options.push(option2.answer);
+            // add the actual answer at a random place in the options array
+            options.splice(random(0, 2), 0, question.answer);
+
+            // loop through each option and display it as a button
+            options.forEach(function (name) {
+                button = document.createElement("button");
+                button.value = name;
+                button.textContent = name;
+                $form.appendChild(button);
+            });
+
+            // choose an option from all the possible answers but without choosing the same option twice
+            function chooseOption() {
+                var option = quiz.questions[random(quiz.questions.length) - 1];
+                // check to see if the option chosen is the current question or already one of the options, if it is then recursively call this function until it isn't
+                if (option === question || options.indexOf(option.answer) !== -1) {
+                    return chooseOption();
+                }
+                return option;
+            }
         }
 
         function check(answer) {
             console.log("check() invoked");
 
-            if (answer === quiz.questions[i].answer) { // quiz[i][1] is the ith answer
+            if(answer === question.answer){
                 update($feedback, "Correct!", "right");
                 // increase score by 1
                 score++;
@@ -100,8 +156,8 @@
             } else {
                 update($feedback, "Wrong!", "wrong");
             }
-
             i++;
+            //now how the hell do i check if thats last answer?
             if (i === quiz.questions.length) {
                 gameOver();
             } else {
@@ -111,7 +167,14 @@
 
         function chooseQuestion() {
             console.log("chooseQuestion() invoked");
-            var question = quiz.questions[i].question;
+            var questions = quiz.questions.filter(function (question) {
+                return question.asked === false;
+            });
+
+            //NOW CLEAR THE FUCKING FORM, YO...
+            $form.innerHTML = "";
+            // set the current question
+            question = questions[random(questions.length) - 1];
             ask(question);
         }
 
@@ -121,14 +184,17 @@
             update($question, "Game Over, you scored " + score + " points");
 
             hide($form);
-            hide($feedback);
+            //hide($feedback);
             show($start);
 
             // stop the countdown interval
             window.clearInterval(interval);
+
+            //reset questions counter
+            i=0;
         }
 
-        var i = 0;
+
         chooseQuestion();
 
     }
@@ -139,5 +205,6 @@
     }, false);
 
     update($score, score);
+
 
 }());
