@@ -12,7 +12,7 @@
 
     $form.addEventListener("submit", function (e) {
         e.preventDefault();
-    })
+    });
 
     var quiz = {
         "name": "Super Hero Name Quiz",
@@ -85,8 +85,8 @@
 
 
         //reset score
-        /*score = 0;
-        update($score, score);*/
+        score = 0;
+        update($score, score);
 
         // initialize timer and set up an interval that counts down
         var time = 20;
@@ -94,9 +94,12 @@
         var interval = window.setInterval(countDown, 1000);
 
         // add event listener to form for when it's submitted
-        $form.addEventListener('click', function(event) {
-            check(event.target.value);
-        }, false);
+        function listenCheck(e) {
+            check(e.target.value);
+        }
+
+
+        $form.addEventListener('click', listenCheck, false);
 
         //functions declarations
 
@@ -148,7 +151,7 @@
         function check(answer) {
             console.log("check() invoked");
 
-            if(answer === question.answer){
+            if (answer === question.answer) {
                 update($feedback, "Correct!", "right");
                 // increase score by 1
                 score++;
@@ -184,16 +187,22 @@
             update($question, "Game Over, you scored " + score + " points");
 
             hide($form);
-            //hide($feedback);
+            hide($timer);
             show($start);
 
             // stop the countdown interval
             window.clearInterval(interval);
 
             //reset questions counter
-            i=0;
-        }
+            i = 0;
 
+            quiz.questions.forEach(function (question) {
+                question.asked = false;
+            });
+
+            //remove event listener from $form
+            $form.removeEventListener("click", listenCheck, false);
+        }
 
         chooseQuestion();
 
