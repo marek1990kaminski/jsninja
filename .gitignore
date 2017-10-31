@@ -28,7 +28,7 @@ ehthumbs.db
 Thumbs.db
 
 # IDE generated files #
-.idea
+.idea/*
 
 # Build Systems #
 ######################
