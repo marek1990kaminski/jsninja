@@ -149,22 +149,22 @@
 
         function check(answer) {
             console.log("check() invoked");
-
-            if (answer === question.answer) {
-                update($feedback, "Correct!", "right");
-                // increase score by 1
-                score++;
-                update($score, score)
-            } else {
-                update($feedback, "Wrong!", "wrong");
-            }
+            //ternaries
+            answer === question.answer ? (
+                    update($feedback, "Correct!", "right"),
+                        // increase score by 1
+                        score++,
+                        update($score, score))
+                : (
+                    update($feedback, "Wrong!", "wrong")
+                )
             i++;
             //now how the hell do i check if thats last answer?
-            if (i === quiz.questions.length) {
-                gameOver();
-            } else {
-                chooseQuestion();
-            }
+            (i === quiz.questions.length) ? (
+                gameOver()
+            ) : (
+                chooseQuestion()
+            )
         }
 
         function chooseQuestion() {
