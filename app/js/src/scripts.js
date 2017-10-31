@@ -9,7 +9,7 @@
     var $form = document.getElementById("answer");
     var $timer = document.getElementById("timer");
 
-
+//stop the automatic refresh of page when the form is submitted.
     $form.addEventListener("submit", function (e) {
         e.preventDefault();
     });
@@ -94,12 +94,11 @@
         var interval = window.setInterval(countDown, 1000);
 
         // add event listener to form for when it's submitted
-        function listenCheck(e) {
+        function onClickFireCheck(e) {
             check(e.target.value);
         }
 
-
-        $form.addEventListener('click', listenCheck, false);
+        $form.addEventListener('click', onClickFireCheck, false);
 
         //functions declarations
 
@@ -201,7 +200,7 @@
             });
 
             //remove event listener from $form
-            $form.removeEventListener("click", listenCheck, false);
+            $form.removeEventListener("click", onClickFireCheck, false);
         }
 
         chooseQuestion();
@@ -217,3 +216,4 @@
 
 
 }());
+
