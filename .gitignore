@@ -27,6 +27,9 @@
 ehthumbs.db
 Thumbs.db
 
+# IDE generated files #
+.idea
+
 # Build Systems #
 ######################
 node_modules/
