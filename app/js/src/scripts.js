@@ -89,10 +89,8 @@
         $feedback.innerHTML = "";
         show($feedback);
 
-
-        // add event listener to form for when it's submitted
-
-        $form.addEventListener('click', this.onClickFireCheck.bind(this), false);
+        // add event listener to form for when it's submitted. If an object is passed as 2nd parameter, then 'handleEvent' property is searched for, and called if its function
+        $form.addEventListener('click', this, false);
 
         this.chooseQuestion();
     }
@@ -107,7 +105,7 @@
         // set the current question
         this.question = questions[random(questions.length) - 1];
         this.ask(this.question);
-    }
+    };
 
     Game.prototype.ask = function (question) {
         console.log("ask() invoked");
@@ -147,7 +145,7 @@
             }
             return option;
         }
-    }
+    };
 
     Game.prototype.check = function (answer) {
         console.log("check() invoked");
@@ -159,7 +157,7 @@
                     update($score, this.score))
             : (
                 update($feedback, "Wrong!", "wrong")
-            )
+            );
         i++;
         //now how the hell do I check if thats last answer?
         (i === quiz.questions.length) ? (
@@ -167,7 +165,7 @@
         ) : (
             this.chooseQuestion()
         )
-    }
+    };
 
     Game.prototype.countDown = function () {
         // decrease time by 1
@@ -178,11 +176,20 @@
         if (this.time <= 0) {
             this.gameOver();
         }
-    }
+    };
 
+    //
     Game.prototype.onClickFireCheck = function (e) {
         this.check(e.target.value);
-    }
+    };
+
+    //Game has to have handleEvent property. It is searched automatically. Game is object, and objects have properties.
+    Game.prototype.handleEvent = function(event) {
+        if (event.type === "click") {
+            //this.onClickFireCheck(event);
+            this.check(event.target.value); //button.value
+        }
+    };
 
     Game.prototype.gameOver = function(){
         console.log("gameOver() invoked");
@@ -204,8 +211,9 @@
         });
 
         //remove event listener from $form
-        $form.removeEventListener("click", this.onClickFireCheck.bind(this), false);
-    }
+        $form.removeEventListener('click', this, false);
+    };
+
 
 
 // Event listeners
