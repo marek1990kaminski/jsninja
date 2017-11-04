@@ -1,5 +1,23 @@
 (function () {
     "use strict"
+
+    // gets the question JSON file using Ajax
+    function getQuiz() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var quiz = JSON.parse(xhr.responseText);
+                console.log("response type: "+ xhr.responseType);
+                console.log("response "+xhr.response);
+                new Game(quiz);
+            }
+        };
+        xhr.open("GET", "https://s3.amazonaws.com/sitepoint-book-content/jsninja/quiz.json", true);
+        xhr.overrideMimeType("application/json");
+        xhr.send();
+        update($question, "Waiting for questions...");
+    }
+
 //// dom references ////
 
     var $question = document.getElementById("question");
@@ -9,19 +27,6 @@
     var $form = document.getElementById("answer");
     var $timer = document.getElementById("timer");
 
-
-    var quiz = {
-        "name": "Super Hero Name Quiz",
-        "description": "How many super heroes can you name?",
-        "question": "What is the real name of ",
-        "questions": [
-            {"question": "Superman", "answer": "Clarke Kent", "asked": false},
-            {"question": "Batman", "answer": "Bruce Wayne", "asked": false},
-            {"question": "Wonder Woman", "answer": "Dianna Prince", "asked": false},
-            {"question": "Spider Man", "answer": "Peter Parker", "asked": false},
-            {"question": "Iron Man", "answer": "Tony Stark", "asked": false},
-        ]
-    };
 
     var question; // current question
     var initialScore = 0; // initialize score
@@ -69,7 +74,7 @@
         return result;
     }
 
-//play function
+//Game function/constructor/class
     function Game(quiz) {
         //first lets set some properties
         this.questions = quiz.questions;
@@ -116,15 +121,16 @@
         question.asked = true;
         update($question, this.phrase + question.question + '?');
 
-        //NOW CLEAR THE FUCKING FORM, YO...
+        //NOW CLEAR THE FORM, YO...
         $form.innerHTML = "";
 
-        // create an array to put the different options in and a button variable
+        // create an array to put the different possible answers in and a button element
         var options = [], button;
         var option1 = chooseOption();
         options.push(option1.answer);
         var option2 = chooseOption();
         options.push(option2.answer);
+
         // add the actual answer at a random place in the options array
         options.splice(random(0, 2), 0, question.answer);
 
@@ -160,7 +166,7 @@
             );
         i++;
         //now how the hell do I check if thats last answer?
-        (i === quiz.questions.length) ? (
+        (i === this.questions.length) ? (
             this.gameOver()
         ) : (
             this.chooseQuestion()
@@ -184,14 +190,14 @@
     };
 
     //Game has to have handleEvent property. It is searched automatically. Game is object, and objects have properties.
-    Game.prototype.handleEvent = function(event) {
+    Game.prototype.handleEvent = function (event) {
         if (event.type === "click") {
             //this.onClickFireCheck(event);
             this.check(event.target.value); //button.value
         }
     };
 
-    Game.prototype.gameOver = function(){
+    Game.prototype.gameOver = function () {
         console.log("gameOver() invoked");
         // inform the player that the game has finished and tell them how many points they have scored
         update($question, "Game Over, you scored " + this.score + " points");
@@ -215,11 +221,8 @@
     };
 
 
-
 // Event listeners
-    $start.addEventListener('click', function () {
-        new Game(quiz);
-    }, false);
+    $start.addEventListener('click', getQuiz, false);
 
     update($score, initialScore);
 
