@@ -7,8 +7,8 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var quiz = JSON.parse(xhr.responseText);
-                console.log("response type: "+ xhr.responseType);
-                console.log("response "+xhr.response);
+                console.log("response type: " + xhr.responseType);
+                console.log("response " + xhr.response);
                 new Game(quiz);
             }
         };
@@ -26,6 +26,7 @@
     var $start = document.getElementById("start");
     var $form = document.getElementById("answer");
     var $timer = document.getElementById("timer");
+    var $hiscore = document.getElementById("hiScore")
 
 
     var question; // current question
@@ -99,6 +100,22 @@
 
         this.chooseQuestion();
     }
+
+    //Score storage using localStorage
+    Game.prototype.hiScore = function () {
+        if (window.localStorage) {
+            // the value held in localStorage is initally null so make it 0
+            var hi = localStorage.getItem("hiScore") || 0;
+            // check if the hi-score has been beaten and display a messageif it has
+            if (this.score > hi || hi === 0) {
+                if (this.score > hi) {
+                    window.alert("ey b0ss, you just beaten the high score with your " + this.score + " scores!");
+                }
+                localStorage.setItem("hiScore", this.score);
+            }
+            return localStorage.getItem("hiScore");
+        }
+    };
 
     //here we fumble in the Game.prototype
     Game.prototype.chooseQuestion = function () {
@@ -218,6 +235,9 @@
 
         //remove event listener from $form
         $form.removeEventListener('click', this, false);
+
+        $hiscore.innerText = "for now the higest score = " + this.hiScore();
+
     };
 
 
