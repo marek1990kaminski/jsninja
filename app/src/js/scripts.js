@@ -1,6 +1,42 @@
 (function () {
     "use strict"
 
+    var view = (function () {
+
+        /// view functions ///
+        function update(element, content, klass) {
+            console.trace();
+            var p = element.firstChild || document.createElement("p");          //firstChild works, because every element in HTM file has been created without any whitespaces inside
+            p.textContent = content;
+            element.appendChild(p);
+            if (klass) {
+                p.className = klass;
+            }
+        }
+
+        //helper functions
+        function hide(element) {
+            element.style.display = "none";
+        }
+
+        function show(element) {
+            element.style.display = "block";
+        }
+
+        return {
+            question: document.getElementById("question"),
+            score: document.getElementById("score"),
+            feedback: document.getElementById("feedback"),
+            start: document.getElementById("start"),
+            form: document.getElementById("answer"),
+            timer: document.getElementById("timer"),
+            hiscore: document.getElementById("hiScore"),
+            update: update,
+            hide: hide,
+            show: show
+        }
+    }());
+
     // gets the question JSON file using Ajax
     function getQuiz() {
         var xhr = new XMLHttpRequest();
@@ -15,48 +51,20 @@
         xhr.open("GET", "https://s3.amazonaws.com/sitepoint-book-content/jsninja/quiz.json", true);
         xhr.overrideMimeType("application/json");
         xhr.send();
-        update($question, "Waiting for questions...");
+        view.update(view.question, "Waiting for questions...");
     }
 
-//// dom references ////
-
-    var $question = document.getElementById("question");
-    var $score = document.getElementById("score");
-    var $feedback = document.getElementById("feedback");
-    var $start = document.getElementById("start");
-    var $form = document.getElementById("answer");
-    var $timer = document.getElementById("timer");
-    var $hiscore = document.getElementById("hiScore");
 
     var initialScore = 0; // initialize score
 
     var i = 0; //initialize counter of questions... maybe we can make it so it isn't global variable
-/// view functions ///
-    function update(element, content, klass) {
-        console.trace();
-        var p = element.firstChild || document.createElement("p"); //firstChild works, because every element in HTM file has been created without any whitespaces inside
-        p.textContent = content;
-        element.appendChild(p);
-        if (klass) {
-            p.className = klass;
-        }
-    }
-
-//helper functions
-    function hide(element) {
-        element.style.display = "none";
-    }
-
-    function show(element) {
-        element.style.display = "block";
-    }
 
 
 // hide the form at the start of the game
-    hide($form);
+    view.hide(view.form);
 
 //hide the timer
-    hide($timer);
+    view.hide(view.timer);
 
 
 //random function
@@ -79,22 +87,22 @@
         this.questions = quiz.questions;
         this.phrase = quiz.question;
         this.score = 0;//initialize score
-        update($score, this.score); //and make it visible
+        view.update(view.score, this.score); //and make it visible
 
         // initialize timer and set up an interval that counts down
         this.time = 20;
-        update($timer, this.time);
+        view.update(view.timer, this.time);
         this.interval = window.setInterval(this.countDown.bind(this), 1000);
 
         // hide button, and show form and feedback and timer, besides, feedback needs to be cleared.
-        hide($start);
-        show($form);
-        show($timer);
-        $feedback.innerHTML = "";
-        show($feedback);
+        view.hide(view.start);
+        view.show(view.form);
+        view.show(view.timer);
+        view.feedback.innerHTML = "";
+        view.show(view.feedback);
 
         // add event listener to form for when it's submitted. If an object is passed as 2nd parameter, then 'handleEvent' property is searched for, and called if its function
-        $form.addEventListener('click', this, false);
+        view.form.addEventListener('click', this, false);
 
         this.chooseQuestion();
     }
@@ -134,10 +142,10 @@
 
         // set the question.asked property to true so it's not asked again
         question.asked = true;
-        update($question, this.phrase + question.question + '?');
+        view.update(view.question, this.phrase + question.question + '?');
 
         //NOW CLEAR THE FORM, YO...
-        $form.innerHTML = "";
+        view.form.innerHTML = "";
 
         // create an array to put the different possible answers in and a button element
         var options = [], button;
@@ -154,7 +162,7 @@
             button = document.createElement("button");
             button.value = name;
             button.textContent = name;
-            $form.appendChild(button);
+            view.form.appendChild(button);
         });
 
         // choose an option from all the possible answers but without choosing the same option twice. We have to choose one of the objects randomly, to find proposition for answer that lays within.
@@ -172,12 +180,12 @@
         console.log("check() invoked");
         //ternaries
         answer === this.question.answer ? (
-                update($feedback, "Correct!", "right"),
+                view.update(view.feedback, "Correct!", "right"),
                     // increase score by 1
                     this.score++,
-                    update($score, this.score))
+                    view.update(view.score, this.score))
             : (
-                update($feedback, "Wrong!", "wrong")
+                view.update(view.feedback, "Wrong!", "wrong")
             );
         i++;
         //now how the hell do I check if thats last answer?
@@ -192,7 +200,7 @@
         // decrease time by 1
         this.time--;
         // update the time displayed
-        update($timer, this.time);
+        view.update(view.timer, this.time);
         // the game is over if the timer has reached 0
         if (this.time <= 0) {
             this.gameOver();
@@ -215,11 +223,11 @@
     Game.prototype.gameOver = function () {
         console.log("gameOver() invoked");
         // inform the player that the game has finished and tell them how many points they have scored
-        update($question, "Game Over, you scored " + this.score + " points");
+        view.update(view.question, "Game Over, you scored " + this.score + " points");
 
-        hide($form);
-        hide($timer);
-        show($start);
+        view.hide(view.form);
+        view.hide(view.timer);
+        view.show(view.start);
 
         // stop the countdown interval
         window.clearInterval(this.interval);
@@ -232,20 +240,20 @@
         });
 
         //remove event listener from $form
-        $form.removeEventListener('click', this, false);
+        view.form.removeEventListener('click', this, false);
 
-        $hiscore.innerText = "for now the higest score = " + this.hiScore();
+        view.hiscore.innerText = "for now the higest score = " + this.hiScore();
 
     };
 
 
 // Event listeners
-    $start.addEventListener('click', getQuiz, false);
+    view.start.addEventListener('click', getQuiz, false);
 
-    update($score, initialScore);
+    view.update(view.score, initialScore);
 
     //stop the automatic refresh of page when the form is submitted.
-    $form.addEventListener("submit", function (e) {
+    view.form.addEventListener("submit", function (e) {
         e.preventDefault();
     }, false);
 
