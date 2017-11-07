@@ -26,10 +26,8 @@
     var $start = document.getElementById("start");
     var $form = document.getElementById("answer");
     var $timer = document.getElementById("timer");
-    var $hiscore = document.getElementById("hiScore")
-
-
-    var question; // current question
+    var $hiscore = document.getElementById("hiScore");
+    
     var initialScore = 0; // initialize score
 
     var i = 0; //initialize counter of questions... maybe we can make it so it isn't global variable

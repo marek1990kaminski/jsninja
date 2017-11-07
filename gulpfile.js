@@ -13,7 +13,7 @@ gulp.task('scripts', function () {
         .pipe(plumber())
         .pipe(uglify())
         .pipe(gulp.dest('app/js/dst'))
-    /*.pipe(reload({stream: true}))*/;
+        .pipe(reload({stream: true}));
 });
 
 //styles task
@@ -22,13 +22,13 @@ gulp.task('styles', function () {
         .pipe(plumber())
         .on('error', sass.logError)
         .pipe(gulp.dest('app/css/dst'))
-        /*.pipe(reload({stream: true}))*/;
+        .pipe(reload({stream: true}));
 });
 
 //HTML Task
 gulp.task('html', function () {
     gulp.src('app/*.htm')
-    /*.pipe(reload({stream: true}))*/;
+        .pipe(reload({stream: true}));
 });
 
 //Browser-Sync Task
